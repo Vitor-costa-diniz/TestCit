@@ -22,22 +22,12 @@ final class ListViewModel: ObservableObject {
     
     func loadPosts(reload: Bool = false) async {
         if posts.isEmpty || reload {
-            await MainActor.run {
-                isLoadingState = true
-                do { isLoadingState = false }
-            }
-            
             await loadPostsService()
         }
     }
     
     func loadPostComments(reload: Bool = false) async {
         if comments.isEmpty || reload {
-            await MainActor.run {
-                isLoadingState = true
-                do { isLoadingState = false }
-            }
-            
             await loadCommentsService()
         }
     }
@@ -45,19 +35,13 @@ final class ListViewModel: ObservableObject {
 
 // MARK: Private funcs
 extension ListViewModel {
+    @MainActor
     private func loadPostsService() async {
-        await MainActor.run {
-            isLoadingState = true
-            do { isLoadingState = false }
-        }
-        
         do {
             let newPosts = try await networkingService.loadPosts()
-            await MainActor.run {
-                posts = newPosts.shuffled()
-            }
+            posts = newPosts.shuffled()
         } catch {
-            errorType = .comment(message: "Failed to load posts. This might be due to a poor internet connection or a server issue. Please try again later.")
+            errorType = .post(message: "Failed to load posts. This might be due to a poor internet connection or a server issue. Please try again later.")
         }
     }
     
@@ -68,7 +52,7 @@ extension ListViewModel {
                 self.comments.append(contentsOf: newComments)
             }
         } catch {
-            errorType = .post(message: "Failed to load comments. This might be due to a poor internet connection or a server issue. Please try again later.")
+            errorType = .comment(message: "Failed to load comments. This might be due to a poor internet connection or a server issue. Please try again later.")
         }
     }
 }
