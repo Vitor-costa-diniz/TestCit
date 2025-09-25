@@ -12,11 +12,6 @@ enum ErrorType {
     case post(message: String)
     case comment(message: String)
     
-    enum CaseType: Equatable {
-        case post
-        case comment
-    }
-    
     var type: CaseType {
         switch self {
         case .post: return .post
