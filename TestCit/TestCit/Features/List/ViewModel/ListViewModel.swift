@@ -19,9 +19,9 @@ final class ListViewModel: ObservableObject {
         self.networkingService = networkingService
     }
     
-    func loadInitialPosts() async {
-        if posts.isEmpty {
-            await loadPosts()
+    func loadPosts(reload: Bool = false) async {
+        if posts.isEmpty || reload {
+            await loadPostsService()
         }
     }
     
@@ -37,11 +37,15 @@ final class ListViewModel: ObservableObject {
             }
         }
     }
+    
+    func retry() async {
+        await loadPosts(reload: true)
+    }
 }
 
 // MARK: Private funcs
 extension ListViewModel {
-    private func loadPosts() async {
+    private func loadPostsService() async {
         do {
             let newPosts = try await networkingService.loadPosts()
             await MainActor.run {

@@ -13,10 +13,11 @@ struct ListView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                ForEach(viewModel.posts) { item in
-                    CardList(item: item)
-                        .padding(.bottom, 8)
-                        .onTapGesture { viewModel.selectedPost = item }
+                LazyVStack(spacing: 8) {
+                    ForEach(viewModel.posts) { item in
+                        CardList(item: item)
+                            .onTapGesture { viewModel.selectedPost = item }
+                    }
                 }
                 .padding(.horizontal, 2)
             }
@@ -26,8 +27,11 @@ struct ListView: View {
                 DetailView(post: post)
                     .environmentObject(viewModel)
             }
+            .refreshable {
+                await viewModel.loadPosts(reload: true)
+            }
             .task {
-                await viewModel.loadInitialPosts()
+                await viewModel.loadPosts()
             }
         }
     }
