@@ -14,7 +14,7 @@ final class ListViewModel: ObservableObject {
     @Published var comments: [Comment] = []
     @Published var selectedPost: Post?
     @Published var errorType: ErrorType?
-    private var isLoading = false
+    @Published var isLoadingState = false
     
     init(networkingService: NetworkingService = JSONPlaceholderService()) {
         self.networkingService = networkingService
@@ -28,6 +28,11 @@ final class ListViewModel: ObservableObject {
     
     func loadPostComments() async {
         if comments.isEmpty {
+            await MainActor.run {
+                isLoadingState = true
+                do { isLoadingState = false }
+            }
+            
             do {
                 let newComments = try await networkingService.loadComments(postId: self.selectedPost?.id ?? 1)
                 await MainActor.run {
@@ -47,6 +52,11 @@ final class ListViewModel: ObservableObject {
 // MARK: Private funcs
 extension ListViewModel {
     private func loadPostsService() async {
+        await MainActor.run {
+            isLoadingState = true
+            do { isLoadingState = false }
+        }
+        
         do {
             let newPosts = try await networkingService.loadPosts()
             await MainActor.run {

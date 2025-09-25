@@ -28,6 +28,16 @@ struct ListView: View {
                     }
                 }
             }
+            .overlay {
+                if viewModel.isLoadingState {
+                    ProgressView(label: {
+                        Text("Loading")
+                            .font(.caption)
+                            .foregroundStyle(Color.secondary)
+                    })
+                    .progressViewStyle(.circular)
+                }
+            }
             .padding(.horizontal, 2)
             .scrollIndicators(.hidden)
             .navigationTitle("Posts")

@@ -47,16 +47,13 @@ struct DetailView: View {
     
     private var commentSection: some View {
         VStack(alignment: .center) {
-            if viewModel.comments.isEmpty {
-                Group {
-                    Text("This post dont have any comments yet!")
-                        .padding(.bottom, 4)
-                    
-                    Image(systemName: "xmark")
-                        .resizable()
-                        .frame(width: 20, height: 20)
-                }
-                .foregroundStyle(.gray)
+            if viewModel.isLoadingState {
+                ProgressView(label: {
+                    Text("Loading")
+                        .font(.caption)
+                        .foregroundStyle(Color.secondary)
+                })
+                .progressViewStyle(.circular)
             } else {
                 VStack(alignment: .leading) {
                     ForEach(viewModel.comments) {
