@@ -14,8 +14,6 @@ final class ListViewModel: ObservableObject {
     @Published var comments: [Comment] = []
     @Published var selectedPost: Post?
     private var isLoading = false
-    private var currentPage = 0
-    private let limit = 30
     
     init(networkingService: NetworkingService = JSONPlaceholderService()) {
         self.networkingService = networkingService
@@ -45,11 +43,10 @@ final class ListViewModel: ObservableObject {
 extension ListViewModel {
     private func loadPosts() async {
         do {
-            let newPosts = try await networkingService.loadPosts(start: currentPage * limit, limit: limit)
+            let newPosts = try await networkingService.loadPosts()
             await MainActor.run {
-                posts.append(contentsOf: newPosts)
+                posts = newPosts.shuffled()
             }
-            currentPage += 1
         } catch {
             print("Error loading posts: \(error)")
         }
