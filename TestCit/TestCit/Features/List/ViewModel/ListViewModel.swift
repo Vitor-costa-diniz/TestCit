@@ -57,7 +57,7 @@ extension ListViewModel {
                 posts = newPosts.shuffled()
             }
         } catch {
-            errorType = .comment(message: "Error loading comments, please try again later")
+            errorType = .comment(message: "Failed to load posts. This might be due to a poor internet connection or a server issue. Please try again later.")
         }
     }
     
@@ -68,7 +68,7 @@ extension ListViewModel {
                 self.comments.append(contentsOf: newComments)
             }
         } catch {
-            errorType = .post(message: "Error loading comments, please try again later)")
+            errorType = .post(message: "Failed to load comments. This might be due to a poor internet connection or a server issue. Please try again later.")
         }
     }
 }
