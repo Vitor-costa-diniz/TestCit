@@ -22,30 +22,24 @@ final class ListViewModel: ObservableObject {
     
     func loadPosts(reload: Bool = false) async {
         if posts.isEmpty || reload {
-            await loadPostsService()
-        }
-    }
-    
-    func loadPostComments() async {
-        if comments.isEmpty {
             await MainActor.run {
                 isLoadingState = true
                 do { isLoadingState = false }
             }
             
-            do {
-                let newComments = try await networkingService.loadComments(postId: self.selectedPost?.id ?? 1)
-                await MainActor.run {
-                    self.comments.append(contentsOf: newComments)
-                }
-            } catch {
-                errorType = .post(message: "Error loading comments: \(error)")
-            }
+            await loadPostsService()
         }
     }
     
-    func retry() async {
-        await loadPosts(reload: true)
+    func loadPostComments(reload: Bool = false) async {
+        if comments.isEmpty || reload {
+            await MainActor.run {
+                isLoadingState = true
+                do { isLoadingState = false }
+            }
+            
+            await loadCommentsService()
+        }
     }
 }
 
@@ -64,6 +58,17 @@ extension ListViewModel {
             }
         } catch {
             errorType = .comment(message: "Error loading comments: \(error)")
+        }
+    }
+    
+    private func loadCommentsService() async {
+        do {
+            let newComments = try await networkingService.loadComments(postId: self.selectedPost?.id ?? 1)
+            await MainActor.run {
+                self.comments.append(contentsOf: newComments)
+            }
+        } catch {
+            errorType = .post(message: "Error loading comments: \(error)")
         }
     }
 }

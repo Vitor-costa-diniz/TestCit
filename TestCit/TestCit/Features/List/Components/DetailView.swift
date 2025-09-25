@@ -62,6 +62,10 @@ struct DetailView: View {
                         }
                     }
                 }
+                .scrollIndicators(.hidden)
+                .refreshable {
+                    await viewModel.loadPostComments(reload: true)
+                }
             }
         }
     }
