@@ -13,13 +13,17 @@ struct ListView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                ForEach(viewModel.posts) {
-                    CardList(item: $0)
+                ForEach(viewModel.posts) { item in
+                    CardList(item: item)
+                        .onTapGesture { viewModel.selectedPost = item }
                 }
                 .padding(.horizontal, 2)
             }
             .scrollIndicators(.hidden)
             .navigationTitle("Posts")
+            .navigationDestination(item: $viewModel.selectedPost) { post in
+                Text(post.title ?? "asdasd")
+            }
             .task {
                 await viewModel.loadInitialPosts()
             }

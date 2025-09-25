@@ -11,6 +11,7 @@ final class ListViewModel: ObservableObject {
     private let service: NetworkingService
     
     @Published var posts: [Post] = []
+    @Published var selectedPost: Post?
     private var isLoading = false
     private var currentPage = 0
     private let limit = 30
