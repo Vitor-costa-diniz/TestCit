@@ -22,4 +22,18 @@ struct Post: Codable, Identifiable, Hashable {
         .init(userId: 2, id: 2, title: "second post title", body: "second post body"),
         .init(userId: 3, id: 3, title: "first post title", body: "first post body")
     ]
+    
+    init(userId: Int?, id: Int?, title: String?, body: String?) {
+        self.userId = userId
+        self.id = id
+        self.title = title
+        self.body = body
+    }
+    
+    init() {
+        self.userId = 1
+        self.id = 1
+        self.title = "first post title"
+        self.body = "first post body"
+    }
 }

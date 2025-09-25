@@ -15,6 +15,7 @@ struct ListView: View {
             ScrollView {
                 ForEach(viewModel.posts) { item in
                     CardList(item: item)
+                        .padding(.bottom, 8)
                         .onTapGesture { viewModel.selectedPost = item }
                 }
                 .padding(.horizontal, 2)
@@ -22,7 +23,8 @@ struct ListView: View {
             .scrollIndicators(.hidden)
             .navigationTitle("Posts")
             .navigationDestination(item: $viewModel.selectedPost) { post in
-                Text(post.title ?? "asdasd")
+                DetailView(post: post)
+                    .environmentObject(viewModel)
             }
             .task {
                 await viewModel.loadInitialPosts()
