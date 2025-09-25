@@ -9,4 +9,5 @@ import Foundation
 
 protocol NetworkingService {
     func loadPosts(start: Int, limit: Int) async throws -> [Post]
+    func loadComments(postId: Int) async throws -> [Comment]
 }

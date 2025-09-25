@@ -40,12 +40,19 @@ struct DetailView: View {
                             .frame(width: 20, height: 20)
                     }
                     .foregroundStyle(.gray)
+                } else {
+                    VStack(alignment: .leading) {
+                        ForEach(viewModel.comments) {
+                            Text($0.name ?? "")
+                        }
+                    }
                 }
             }
             
             Spacer()
         }
         .padding(.horizontal, 16)
+        .task { await viewModel.loadPostComments() }
     }
 }
 

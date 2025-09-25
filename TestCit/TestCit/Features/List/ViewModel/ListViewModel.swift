@@ -8,7 +8,7 @@
 import Foundation
 
 final class ListViewModel: ObservableObject {
-    private let service: NetworkingService
+    private let networkingService: NetworkingService
     
     @Published var posts: [Post] = []
     @Published var comments: [Comment] = []
@@ -17,13 +17,26 @@ final class ListViewModel: ObservableObject {
     private var currentPage = 0
     private let limit = 30
     
-    init(service: NetworkingService = JSONPlaceholderService()) {
-        self.service = service
+    init(networkingService: NetworkingService = JSONPlaceholderService()) {
+        self.networkingService = networkingService
     }
     
     func loadInitialPosts() async {
         if posts.isEmpty {
             await loadPosts()
+        }
+    }
+    
+    func loadPostComments() async {
+        if comments.isEmpty {
+            do {
+                let newComments = try await networkingService.loadComments(postId: self.selectedPost?.id ?? 1)
+                await MainActor.run {
+                    self.comments.append(contentsOf: newComments)
+                }
+            } catch {
+                print("Error loading comments: \(error)")
+            }
         }
     }
 }
@@ -32,7 +45,7 @@ final class ListViewModel: ObservableObject {
 extension ListViewModel {
     private func loadPosts() async {
         do {
-            let newPosts = try await service.loadPosts(start: currentPage * limit, limit: limit)
+            let newPosts = try await networkingService.loadPosts(start: currentPage * limit, limit: limit)
             await MainActor.run {
                 posts.append(contentsOf: newPosts)
             }
