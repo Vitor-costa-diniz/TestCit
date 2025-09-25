@@ -14,10 +14,7 @@ struct Post: Codable {
     let body: String?
     
     enum CodingKeys: String, CodingKey {
-        case userId
-        case id
-        case title
-        case body
+        case id, userId, title, body
     }
     
     static let mockPosts: [Post] = [
