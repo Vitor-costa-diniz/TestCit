@@ -11,11 +11,18 @@ struct ListView: View {
     @StateObject private var viewModel: ListViewModel = .init()
     
     var body: some View {
-            List(viewModel.posts) {
-                Text($0.title ?? "")
+        NavigationStack {
+            ScrollView {
+                ForEach(viewModel.posts) {
+                    CardList(item: $0)
+                }
+                .padding(.horizontal, 2)
             }
-        .task {
-            await viewModel.loadInitialPosts()
+            .scrollIndicators(.hidden)
+            .navigationTitle("Posts")
+            .task {
+                await viewModel.loadInitialPosts()
+            }
         }
     }
 }

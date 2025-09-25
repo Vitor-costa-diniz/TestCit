@@ -13,7 +13,7 @@ final class ListViewModel: ObservableObject {
     @Published var posts: [Post] = []
     private var isLoading = false
     private var currentPage = 0
-    private let limit = 50
+    private let limit = 30
     
     init(service: NetworkingService = JSONPlaceholderService()) {
         self.service = service
@@ -22,7 +22,6 @@ final class ListViewModel: ObservableObject {
     func loadInitialPosts() async {
         if posts.isEmpty {
             await loadPosts()
-            print(posts)
         }
     }
 }
