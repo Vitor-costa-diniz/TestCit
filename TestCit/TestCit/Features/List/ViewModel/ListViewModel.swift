@@ -13,6 +13,7 @@ final class ListViewModel: ObservableObject {
     @Published var posts: [Post] = []
     @Published var comments: [Comment] = []
     @Published var selectedPost: Post?
+    @Published var errorType: ErrorType?
     private var isLoading = false
     
     init(networkingService: NetworkingService = JSONPlaceholderService()) {
@@ -33,7 +34,7 @@ final class ListViewModel: ObservableObject {
                     self.comments.append(contentsOf: newComments)
                 }
             } catch {
-                print("Error loading comments: \(error)")
+                errorType = .post(message: "Error loading comments: \(error)")
             }
         }
     }
@@ -52,7 +53,7 @@ extension ListViewModel {
                 posts = newPosts.shuffled()
             }
         } catch {
-            print("Error loading posts: \(error)")
+            errorType = .comment(message: "Error loading comments: \(error)")
         }
     }
 }

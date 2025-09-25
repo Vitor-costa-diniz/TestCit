@@ -29,30 +29,42 @@ struct DetailView: View {
                 .font(.largeTitle)
                 .padding(.bottom, 4)
             
-            VStack(alignment: .center) {
-                if viewModel.comments.isEmpty {
-                    Group {
-                        Text("This post dont have any comments yet!")
-                            .padding(.bottom, 4)
-                        
-                        Image(systemName: "xmark")
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                    }
-                    .foregroundStyle(.gray)
-                } else {
-                    VStack(alignment: .leading) {
-                        ForEach(viewModel.comments) {
-                            Text($0.name ?? "")
-                        }
-                    }
+            if viewModel.errorType?.type == .comment {
+                Group {
+                    Text("Error Loading comments")
+                    Text(viewModel.errorType?.message ?? "")
                 }
+                .font(.largeTitle)
+            } else {
+                commentSection
             }
             
             Spacer()
         }
         .padding(.horizontal, 16)
         .task { await viewModel.loadPostComments() }
+    }
+    
+    private var commentSection: some View {
+        VStack(alignment: .center) {
+            if viewModel.comments.isEmpty {
+                Group {
+                    Text("This post dont have any comments yet!")
+                        .padding(.bottom, 4)
+                    
+                    Image(systemName: "xmark")
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                }
+                .foregroundStyle(.gray)
+            } else {
+                VStack(alignment: .leading) {
+                    ForEach(viewModel.comments) {
+                        Text($0.name ?? "")
+                    }
+                }
+            }
+        }
     }
 }
 

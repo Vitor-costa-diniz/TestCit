@@ -13,19 +13,28 @@ struct ListView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                LazyVStack(spacing: 8) {
-                    ForEach(viewModel.posts) { item in
-                        CardList(item: item)
-                            .onTapGesture { viewModel.selectedPost = item }
+                if viewModel.errorType?.type == .post {
+                    Group {
+                        Text("Error Loading posts")
+                        Text(viewModel.errorType?.message ?? "")
+                    }
+                    .font(.largeTitle)
+                } else {
+                    LazyVStack(spacing: 8) {
+                        ForEach(viewModel.posts) { item in
+                            CardList(item: item)
+                                .onTapGesture { viewModel.selectedPost = item }
+                        }
                     }
                 }
-                .padding(.horizontal, 2)
             }
+            .padding(.horizontal, 2)
             .scrollIndicators(.hidden)
             .navigationTitle("Posts")
             .navigationDestination(item: $viewModel.selectedPost) { post in
                 DetailView(post: post)
                     .environmentObject(viewModel)
+                    .onDisappear { viewModel.comments.removeAll() }
             }
             .refreshable {
                 await viewModel.loadPosts(reload: true)
