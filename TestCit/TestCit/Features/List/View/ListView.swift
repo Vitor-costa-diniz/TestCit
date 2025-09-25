@@ -8,8 +8,15 @@
 import SwiftUI
 
 struct ListView: View {
+    @StateObject private var viewModel: ListViewModel = .init()
+    
     var body: some View {
-        Text("Hello")
+            List(viewModel.posts) {
+                Text($0.title ?? "")
+            }
+        .task {
+            await viewModel.loadInitialPosts()
+        }
     }
 }
 
