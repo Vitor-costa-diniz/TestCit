@@ -55,9 +55,11 @@ struct DetailView: View {
                 })
                 .progressViewStyle(.circular)
             } else {
-                VStack(alignment: .leading) {
-                    ForEach(viewModel.comments) {
-                        Text($0.name ?? "")
+                ScrollView {
+                    LazyVStack(spacing: 8) {
+                        ForEach(viewModel.comments) { item in
+                            CardComment(comment: item)
+                        }
                     }
                 }
             }

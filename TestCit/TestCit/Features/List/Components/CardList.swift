@@ -28,10 +28,10 @@ struct CardList: View {
         }
         .frame(maxWidth: 358)
         .padding(8)
-        .overlay(
+        .overlay {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(.gray, lineWidth: 2)
-        )
+        }
     }
 }
 
