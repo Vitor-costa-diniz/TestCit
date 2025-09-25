@@ -14,10 +14,18 @@ struct ListView: View {
         NavigationStack {
             ScrollView {
                 if viewModel.errorType?.type == .post {
-                    Group {
+                    VStack(alignment: .center) {
                         Text("Error Loading posts")
+                        
                         Text(viewModel.errorType?.message ?? "")
+                        
+                        Button("Retry") {
+                            Task { await viewModel.loadPosts(reload: true)}
+                        }
+                        .buttonStyle(.borderedProminent)
+                        
                     }
+                    .multilineTextAlignment(.center)
                     .font(.largeTitle)
                 } else {
                     LazyVStack(spacing: 8) {

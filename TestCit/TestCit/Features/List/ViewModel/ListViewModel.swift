@@ -57,7 +57,7 @@ extension ListViewModel {
                 posts = newPosts.shuffled()
             }
         } catch {
-            errorType = .comment(message: "Error loading comments: \(error)")
+            errorType = .comment(message: "Error loading comments, please try again later")
         }
     }
     
@@ -68,7 +68,7 @@ extension ListViewModel {
                 self.comments.append(contentsOf: newComments)
             }
         } catch {
-            errorType = .post(message: "Error loading comments: \(error)")
+            errorType = .post(message: "Error loading comments, please try again later)")
         }
     }
 }
