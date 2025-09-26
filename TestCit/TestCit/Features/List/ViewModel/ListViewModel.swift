@@ -20,15 +20,21 @@ final class ListViewModel: ObservableObject {
         self.networkingService = networkingService
     }
     
+    @MainActor
     func loadPosts(reload: Bool = false) async {
         if posts.isEmpty || reload {
+            isLoadingState = true
             await loadPostsService()
+            isLoadingState = false
         }
     }
     
+    @MainActor
     func loadPostComments(reload: Bool = false) async {
         if comments.isEmpty || reload {
+            isLoadingState = true
             await loadCommentsService()
+            isLoadingState = false
         }
     }
 }
@@ -45,12 +51,11 @@ extension ListViewModel {
         }
     }
     
+    @MainActor
     private func loadCommentsService() async {
         do {
             let newComments = try await networkingService.loadComments(postId: self.selectedPost?.id ?? 1)
-            await MainActor.run {
-                self.comments.append(contentsOf: newComments)
-            }
+            self.comments.append(contentsOf: newComments)
         } catch {
             errorType = .comment(message: "Failed to load comments. This might be due to a poor internet connection or a server issue. Please try again later.")
         }
