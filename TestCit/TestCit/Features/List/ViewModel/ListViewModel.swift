@@ -52,7 +52,7 @@ extension ListViewModel {
         defer { isLoadingState = false }
         do {
             let newPosts = try await networkingService.loadPosts()
-            posts = newPosts.shuffled()
+            posts = newPosts.sorted(by: { $0.id ?? 0 < $1.id ?? 1 })
             errorType = nil
         } catch {
             if let urlError = error as? URLError, urlError.code == .cancelled {
@@ -69,7 +69,7 @@ extension ListViewModel {
         defer { isLoadingState = false }
         do {
             let newComments = try await networkingService.loadComments(postId: self.selectedPost?.id ?? 1)
-            self.comments.append(contentsOf: newComments)
+            self.comments = newComments.sorted(by: { $0.id ?? 0 < $1.id ?? 1 })
             errorType = nil
         } catch {
             if let urlError = error as? URLError, urlError.code == .cancelled {
