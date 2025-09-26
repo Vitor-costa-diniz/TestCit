@@ -15,26 +15,31 @@ final class ListViewModel: ObservableObject {
     @Published var selectedPost: Post?
     @Published var errorType: ErrorType?
     @Published var isLoadingState = false
+    private var networkTask: Task<Void, Never>?
     
     init(networkingService: NetworkingService = JSONPlaceholderService()) {
         self.networkingService = networkingService
     }
     
-    @MainActor
     func loadPosts(reload: Bool = false) async {
-        if posts.isEmpty || reload {
-            isLoadingState = true
-            await loadPostsService()
-            isLoadingState = false
+        if networkTask == nil || networkTask?.isCancelled == true {
+            networkTask = Task {
+                await loadPostsService()
+            }
+            
+            await networkTask?.value
+            networkTask = nil
         }
     }
     
-    @MainActor
     func loadPostComments(reload: Bool = false) async {
-        if comments.isEmpty || reload {
-            isLoadingState = true
-            await loadCommentsService()
-            isLoadingState = false
+        if networkTask == nil || networkTask?.isCancelled == true {
+            networkTask = Task {
+                await loadCommentsService()
+            }
+            
+            await networkTask?.value
+            networkTask = nil
         }
     }
 }
@@ -43,20 +48,34 @@ final class ListViewModel: ObservableObject {
 extension ListViewModel {
     @MainActor
     private func loadPostsService() async {
+        isLoadingState = true
+        defer { isLoadingState = false }
         do {
             let newPosts = try await networkingService.loadPosts()
             posts = newPosts.shuffled()
+            errorType = nil
         } catch {
+            if let urlError = error as? URLError, urlError.code == .cancelled {
+                errorType = .post(message: "Too many request made at same time.")
+            }
+            
             errorType = .post(message: "Failed to load posts. This might be due to a poor internet connection or a server issue. Please try again later.")
         }
     }
     
     @MainActor
     private func loadCommentsService() async {
+        isLoadingState = true
+        defer { isLoadingState = false }
         do {
             let newComments = try await networkingService.loadComments(postId: self.selectedPost?.id ?? 1)
             self.comments.append(contentsOf: newComments)
+            errorType = nil
         } catch {
+            if let urlError = error as? URLError, urlError.code == .cancelled {
+                errorType = .comment(message: "Too many request made at same time.")
+            }
+            
             errorType = .comment(message: "Failed to load comments. This might be due to a poor internet connection or a server issue. Please try again later.")
         }
     }
