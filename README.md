@@ -8,7 +8,7 @@ The app was implemented following the **MVVM architecture** to separate concerns
 
 ## Instructions to run the application
 
-1. Clone este repositório:  
+1. Clone this repository:  
    ```bash
    git clone https://github.com/Vitor-costa-diniz/TestCit.git
    cd TestCit
@@ -17,20 +17,26 @@ The app was implemented following the **MVVM architecture** to separate concerns
 3. Run the app on the desired simulator or device.
 
 ## Architectural overview and decisions discussion
-1. 
+1. This project follows the MVVM (Model-View-ViewModel) pattern to clearly separate the UI, application data, and their interactions. This separation also facilitates unit and UI testing, as each component is decoupled and easier to test in isolation.
+
+2. For communication with an external service, the networking layer was implemented using a protocol. This allows the ViewModel to receive the networking dependency via injection. In the future, this makes it simple to inject a mock that conforms to the protocol, simulating API responses without hitting the real service.
+
+3. The code was designed following the DRY (Don't Repeat Yourself) principle, keeping it componentized and reusable throughout the project. This improves maintainability and reduces redundancy.
+
+4. Tests were structured following the “Given-When-Then” pattern to make them more organized and readable, ensuring that each test clearly communicates its intent.
 
 
-## Libraries and tools used (and why)
-* SwiftUI
+## Libraries and tools used
+* **SwiftUI**
     * SwiftUI was chosen to build the user interface due to my prior familiarity with the framework and its modern declarative syntax. Its powerful state management system allows for effortless handling of reactive updates, making the UI both robust and maintainable.
 
-* URLSession
+* **URLSession**
     * URLSession is used to perform requests to external APIs. It was selected because it is a native Swift API, which ensures reliability and long-term support. By using a built-in tool, the project avoids dependency on third-party libraries that could become deprecated, minimizing the need for future refactoring and ensuring a more stable codebase.
 
-* XCTest
+* **XCTest**
     * XCTest is the primary testing framework used in this project. I chose it because of my familiarity and its seamless integration with Xcode. It provides a stable and well-documented environment for unit and integration tests, eliminating the need for additional external testing libraries and ensuring consistent test execution across the project.
 
-* SnapshotTesting(external lib)
+* **SnapshotTesting(external lib)**
     * SnapshotTesting is an external library used for UI and user flow testing. It was chosen due to its simplicity and practicality, allowing quick validation of visual components and interactions. Moreover, it is a well-established and widely adopted tool in the iOS community, providing confidence that tests will remain reliable and maintainable over time.
 
 
