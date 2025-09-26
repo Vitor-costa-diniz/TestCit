@@ -28,7 +28,7 @@ struct Comment: Codable, Identifiable {
 }
 
 extension Comment {
-    static let mockPosts: [Comment] = [
+    static let mockComments: [Comment] = [
         .init(id: 1, postId: 1, name: "First name", email: "first@gmail.com", body: "first body"),
         .init(id: 2, postId: 2, name: "Second name", email: "Second@gmail.com", body: "Second body"),
         .init(id: 3, postId: 3, name: "Third name", email: "Third@gmail.com", body: "Third body"),
