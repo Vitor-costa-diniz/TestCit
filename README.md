@@ -16,7 +16,7 @@ The app was implemented following the **MVVM architecture** to separate concerns
 2. Open the project using Xcode.
 3. Run the app on the desired simulator or device.
 
-## Architectural overview and decisions discussion
+## Architectural overview
 1. This project follows the MVVM (Model-View-ViewModel) pattern to clearly separate the UI, application data, and their interactions. This separation also facilitates unit and UI testing, as each component is decoupled and easier to test in isolation.
 
 2. For communication with an external service, the networking layer was implemented using a protocol. This allows the ViewModel to receive the networking dependency via injection. In the future, this makes it simple to inject a mock that conforms to the protocol, simulating API responses without hitting the real service.
@@ -40,7 +40,7 @@ The app was implemented following the **MVVM architecture** to separate concerns
     * SnapshotTesting is an external library used for UI and user flow testing. It was chosen due to its simplicity and practicality, allowing quick validation of visual components and interactions. Moreover, it is a well-established and widely adopted tool in the iOS community, providing confidence that tests will remain reliable and maintainable over time.
 
 
-## What you would improve with more time
+## What I Would Improve with More Time
 * Implement an internal list of `posts` and `comments` to serve as a fallback in case of API request failures. This would ensure that the user does not see only an error message, but can still experience the app’s normal functionality, simulating real usage.
 
 * Add a separate tab for favorited posts. This would require implementing a database service to store the user’s saved posts. `CoreData` could be used as the persistent layer, following the `Repository` pattern to abstract data access..
