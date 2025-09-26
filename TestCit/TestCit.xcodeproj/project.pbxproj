@@ -29,6 +29,16 @@
 		4A0212542E847ED50031F64C /* TestCitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestCitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		4A0213342E8635CF0031F64C /* Exceptions for "TestCitUITests" folder in "TestCitTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				TestCitSnapshotTests.swift,
+			);
+			target = 4A0212492E847ED50031F64C /* TestCitTests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		4A02123F2E847ED40031F64C /* TestCit */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -42,6 +52,9 @@
 		};
 		4A0212572E847ED50031F64C /* TestCitUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4A0213342E8635CF0031F64C /* Exceptions for "TestCitUITests" folder in "TestCitTests" target */,
+			);
 			path = TestCitUITests;
 			sourceTree = "<group>";
 		};
